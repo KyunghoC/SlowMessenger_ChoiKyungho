@@ -165,21 +165,21 @@ public class WeatherPanel extends JFrame {
 		arr[2]=weather.toStringT1H();
 		arr[3]=weather.toStringREH();
 		arr[4]=weather.toStringRN1();
-		// super(str);
-		// 패널 생성
-		p = new Panel();
-		// 레이블 설정
-		label1 = new Label(weather.toStringdate());
-		label2 = new Label(weather.toStringPTY());
-		label3 = new Label(weather.toStringT1H());
-		label4 = new Label(weather.toStringREH());
-		label5 = new Label(weather.toStringRN1());
-
-		// 레이블 색 설정
-		// label1.setBackground(Color.pink);
-		// label2.setBackground(Color.pink);
-
-		p.setLayout(new GridLayout(5, 1));
+//		// super(str);
+//		// 패널 생성
+//		p = new Panel();
+//		// 레이블 설정
+//		label1 = new Label(weather.toStringdate());
+//		label2 = new Label(weather.toStringPTY());
+//		label3 = new Label(weather.toStringT1H());
+//		label4 = new Label(weather.toStringREH());
+//		label5 = new Label(weather.toStringRN1());
+//
+//		// 레이블 색 설정
+//		// label1.setBackground(Color.pink);
+//		// label2.setBackground(Color.pink);
+//
+//		p.setLayout(new GridLayout(5, 1));
 		
 		
 	}
