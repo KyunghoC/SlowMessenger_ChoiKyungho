@@ -121,7 +121,7 @@ public class CheckFrame extends JFrame implements ActionListener {
 					int check = Integer.parseInt(New_Client.br.readLine());
 					if(check==1)
 					{
-						JOptionPane.showMessageDialog(null, "로그인에 성공하였습니다");
+						JOptionPane.showMessageDialog(null, "계정을 조회하였습니다");
 						new ChangeFrame(us);
 						dispose();
 					}
@@ -140,12 +140,8 @@ public class CheckFrame extends JFrame implements ActionListener {
 			}
 
 		}
-		if (e.getSource() == ExitBtn) {
+		else if (e.getSource() == ExitBtn) {
 			dispose();
-		}
-
-		else {
-			System.out.println("오류입니다");
 		}
 
 	}

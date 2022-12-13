@@ -124,7 +124,6 @@ public class LoginFrame extends JFrame implements ActionListener {
 
 		else if (e.getSource() == changeBtn) {
 			cf = new CheckFrame(us);
-			System.out.println("1");
 		}
 
 		else {

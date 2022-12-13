@@ -24,7 +24,7 @@ public class ChangeFrame extends JFrame implements ActionListener {
 	ChangeFrame(User _us) {
 
 		us = _us;
-		
+
 		icon = new ImageIcon("src/Image/ChangePanel.png");
 		Image img = icon.getImage();
 		Image changeImg = img.getScaledInstance(453, 245, java.awt.Image.SCALE_SMOOTH);
@@ -57,7 +57,7 @@ public class ChangeFrame extends JFrame implements ActionListener {
 		changePanel.add(changeBtn);
 
 		/* Panel 추가 작업 */
-		add(changePanel);
+		getContentPane().add(changePanel);
 
 		/* Button 이벤트 리스너 추가 */
 
@@ -65,6 +65,15 @@ public class ChangeFrame extends JFrame implements ActionListener {
 		setSize(455, 280);
 		setLocationRelativeTo(null);
 		changePanel.setLayout(null);
+
+		JLabel userName = new JLabel() {
+			@Override
+			public void setBorder(Border border) {
+			}
+		};
+		userName.setBounds(269, 145, 65, 14);
+		userName.setText(us.getUserName());
+		changePanel.add(userName);
 
 		setResizable(false);
 		setVisible(true);
@@ -79,7 +88,15 @@ public class ChangeFrame extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == changeBtn) {
-			System.out.println("1");
+			if (!upass.equals("")) {
+				New_Client.pw.println("52282#" + us.getUserID() + "#" + upass + "#" + us.getSalt());
+				JOptionPane.showMessageDialog(null, "변경되었습니다");
+				dispose();
+			}
+			else if(upass.equals(""))
+			{
+				JOptionPane.showMessageDialog(null, "공백으로 둘 수 없습니다.", "변경 실패", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 
 		else {
@@ -87,35 +104,4 @@ public class ChangeFrame extends JFrame implements ActionListener {
 		}
 
 	}
-
-	boolean joinCheck(String _i, String _p) {
-		boolean flag = false;
-
-		String id = _i;
-		String pw = _p;
-		Connection con = null;
-		Statement stmt = null;
-		String url = "jdbc:mysql://localhost/network?serverTimezone=Asia/Seoul"; // network 스키마
-		String user = "root"; // 데이터베이스 아이디
-		String passwd = "12345"; // 데이터베이스 비번
-
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			con = DriverManager.getConnection(url, user, passwd);
-			stmt = con.createStatement();
-			String insertStr = "INSERT INTO client_list (client_id, client_password) VALUES('" + id + "', '" + pw
-					+ "')";
-			stmt.executeUpdate(insertStr);
-			insertStr = "INSERT INTO login_check VALUES('" + id + "', 'logout')";
-			stmt.executeUpdate(insertStr);
-			flag = true;
-			System.out.println("회원가입 성공");
-		} catch (Exception e) {
-			flag = false;
-			System.out.println("회원가입 실패 > " + e.toString());
-		}
-
-		return flag;
-	}
-
 }

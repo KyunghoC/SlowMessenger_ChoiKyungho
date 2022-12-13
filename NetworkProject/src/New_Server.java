@@ -38,8 +38,6 @@ public class New_Server {
 		listener = new ServerSocket(PORT_NO);// 초기화
 
 		System.out.println("ON PORT : " + PORT_NO);
-		listener = new ServerSocket(PORT_NO);// 초기화
-		System.out.println("ON PORT : " + PORT_NO);
 
 		socket = listener.accept(); // 외부에서 소켓이 연결할때까지 대기함
 		System.out.println("accept Connections");
@@ -58,7 +56,7 @@ public class New_Server {
 				break;
 			}
 			
-			if (division[0].equals("52268")) // 계정 확인
+			else if (division[0].equals("52268")) // 계정 확인
 			{
 				int check = SQLInterface.checkAccount(division[1], division[2], division[3]);
 				System.out.println("check is "+ check);
@@ -66,7 +64,7 @@ public class New_Server {
 			}
 			
 
-			if (division[0].equals("52272")) // 로그인
+			else if (division[0].equals("52272")) // 로그인
 			{
 				System.out.println(division[1] + division[2]);
 				int check = SQLInterface.validLogin(division[1], division[2]);
@@ -74,12 +72,12 @@ public class New_Server {
 				pw.println(check);
 			}
 			
-			if(division[0].equals("52270")) // 로그아웃
+			else if(division[0].equals("52270")) // 로그아웃
 			{
 				SQLInterface.client_logout(division[1]);
 			}
 			
-			if(division[0].equals("52269")) // 이건 친구목록 리스트 가져오기
+			else if(division[0].equals("52269")) // 이건 친구목록 리스트 가져오기
 			{
 				String[] temp=null;
 				temp = getSearch(division[1]);
@@ -90,6 +88,11 @@ public class New_Server {
 					pw.println(temp[i]);
 				}
 				pw.println("-1"); // -1은 종료값으로 전달
+			}
+			
+			else if(division[0].equals("52282"))
+			{
+				SQLInterface.validPWChange(division[1], division[2], division[3]);
 			}
 		}
 	}
