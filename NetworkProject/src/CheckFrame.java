@@ -21,8 +21,12 @@ public class CheckFrame extends JFrame implements ActionListener {
 	/* Button */
 	JButton goBtn;
 	JButton ExitBtn;
+	User us = null;
 
-	CheckFrame() {
+	CheckFrame(User _us) {
+
+		us = _us;
+
 		icon = new ImageIcon("src/Image/FindAccount.png");
 		Image img = icon.getImage();
 		Image changeImg = img.getScaledInstance(451, 326, java.awt.Image.SCALE_SMOOTH);
@@ -57,7 +61,7 @@ public class CheckFrame extends JFrame implements ActionListener {
 		checkPanel.add(name);
 		name.setOpaque(false);
 		name.setColumns(10);
-		
+
 		phoneNumber = new JTextField() {
 			@Override
 			public void setBorder(Border border) {
@@ -74,7 +78,7 @@ public class CheckFrame extends JFrame implements ActionListener {
 		goBtn.setContentAreaFilled(false);
 		goBtn.setBorderPainted(false);
 		checkPanel.add(goBtn);
-		
+
 		ExitBtn = new JButton();
 		ExitBtn.setBounds(309, 281, 61, 32);
 		ExitBtn.setContentAreaFilled(false);
@@ -91,31 +95,26 @@ public class CheckFrame extends JFrame implements ActionListener {
 		setSize(455, 360);
 		setLocationRelativeTo(null);
 		checkPanel.setLayout(null);
-		
+
 		setResizable(false);
 		setVisible(true);
 	}
 
 	/* Button 이벤트 리스너 */
-	
+
 	public void actionPerformed(ActionEvent e) {
 		String uid = id.getText();
 		String uName = name.getText();
 		String uPN = phoneNumber.getText();
-		/*if (e.getSource() == goBtn) {
-			if (uid.equals("") || upass.equals("")) {
-				JOptionPane.showMessageDialog(null, "모든 정보를 기입해주세요", "회원가입 실패", JOptionPane.ERROR_MESSAGE);
-				System.out.println("회원가입 실패 > 회원정보 미입력");
-			}
-
-			else if (!uid.equals("") && !uName.equals("") && !uPN.equals("")) {
-				if (함수 들어가야함) {
-				}
-			}
-		}
-		*/
-		if(e.getSource() == ExitBtn)
-		{
+		/*
+		 * if (e.getSource() == goBtn) { if (uid.equals("") || upass.equals("")) {
+		 * JOptionPane.showMessageDialog(null, "모든 정보를 기입해주세요", "회원가입 실패",
+		 * JOptionPane.ERROR_MESSAGE); System.out.println("회원가입 실패 > 회원정보 미입력"); }
+		 * 
+		 * else if (!uid.equals("") && !uName.equals("") && !uPN.equals("")) { if (함수
+		 * 들어가야함) { } } }
+		 */
+		if (e.getSource() == ExitBtn) {
 			dispose();
 		}
 

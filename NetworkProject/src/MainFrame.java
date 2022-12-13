@@ -28,7 +28,12 @@ public class MainFrame extends JFrame {
 
 	CardLayout vc;
 
-	MainFrame() {
+	User us = null;
+	
+	MainFrame(User _us) {
+		
+		us= _us;
+		
 		icon = new ImageIcon("src/Image/MainFrame.png");
 		Image img = icon.getImage();
 		Image changeImg = img.getScaledInstance(511, 773, java.awt.Image.SCALE_SMOOTH);
@@ -229,7 +234,10 @@ public class MainFrame extends JFrame {
 		});
 
 		LogOutBtn.addActionListener(event -> {
-
+			New_Client.pw.println("52270!"+us.getUserID());
+			JOptionPane.showMessageDialog(null, "로그아웃하였습니다");
+			dispose();
+			
 		});
 
 		setTitle("채팅 메신저");
@@ -238,9 +246,5 @@ public class MainFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-
-	public static void main(String[] args) {
-		new MainFrame();
 	}
 }

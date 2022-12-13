@@ -23,8 +23,11 @@ public class JoinFrame extends JFrame implements ActionListener {
 
 	/* Button */
 	JButton suBtn;
-
-	JoinFrame() {
+	User us = null;
+	JoinFrame(User _us) {
+		
+		us=_us;
+		
 		icon = new ImageIcon("src/Image/signupFrame.png");
 		Image img = icon.getImage();
 		Image changeImg = img.getScaledInstance(434, 549, java.awt.Image.SCALE_SMOOTH);

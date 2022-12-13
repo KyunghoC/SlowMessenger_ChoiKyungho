@@ -19,7 +19,12 @@ public class ChangeFrame extends JFrame implements ActionListener {
 	/* Button */
 	JButton changeBtn;
 
-	ChangeFrame() {
+	User us = null;
+
+	ChangeFrame(User _us) {
+
+		us = _us;
+		
 		icon = new ImageIcon("src/Image/ChangePanel.png");
 		Image img = icon.getImage();
 		Image changeImg = img.getScaledInstance(453, 245, java.awt.Image.SCALE_SMOOTH);
@@ -34,7 +39,7 @@ public class ChangeFrame extends JFrame implements ActionListener {
 		setTitle("비밀번호 변경");
 
 		/* PasswordField 크기 작업 */
-		
+
 		pw = new JPasswordField() {
 			@Override
 			public void setBorder(Border border) {
@@ -44,14 +49,12 @@ public class ChangeFrame extends JFrame implements ActionListener {
 		changePanel.add(pw);
 		pw.setOpaque(false);
 
-		
 		/* Button 크기 작업 */
 		changeBtn = new JButton();
 		changeBtn.setBounds(354, 206, 82, 33);
 		changeBtn.setContentAreaFilled(false);
 		changeBtn.setBorderPainted(false);
 		changePanel.add(changeBtn);
-		
 
 		/* Panel 추가 작업 */
 		add(changePanel);
@@ -62,23 +65,22 @@ public class ChangeFrame extends JFrame implements ActionListener {
 		setSize(455, 280);
 		setLocationRelativeTo(null);
 		changePanel.setLayout(null);
-		
+
 		setResizable(false);
 		setVisible(true);
 	}
 
 	/* Button 이벤트 리스너 */
-	
+
 	public void actionPerformed(ActionEvent e) {
 		String upass = "";
 		for (int i = 0; i < pw.getPassword().length; i++) {
 			upass = upass + pw.getPassword()[i];
 		}
-		
+
 		if (e.getSource() == changeBtn) {
 			System.out.println("1");
 		}
-		
 
 		else {
 			System.out.println("오류입니다");
@@ -115,5 +117,5 @@ public class ChangeFrame extends JFrame implements ActionListener {
 
 		return flag;
 	}
-	
+
 }

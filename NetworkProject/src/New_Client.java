@@ -23,36 +23,29 @@ public class New_Client {
 	public static volatile BufferedReader br; // 서버로 부터 데이터를 받기 위한 스트림
 	public static volatile InputStreamReader isr;
 	private static Map<Integer, client_2> chat_room = new HashMap<>(); // 다수의 방을 효율적으로 관리하기 위한 콜렉션
-
+	User us = null;
 	/**
 	 * @param args
 	 * @throws IOException
 	 */
-	New_Client() // 기본적으로 메인 로그인 GUI를 생성
+	New_Client(User _us) // 기본적으로 메인 로그인 GUI를 생성
 	{
-		new LoginFrame();
+		us= _us;
+		new LoginFrame(us);
 		try {
 			socket = new Socket(SERVER_ADDR, SERVER_PORT);
 
 			isr = new InputStreamReader(socket.getInputStream());
 			br = new BufferedReader(isr); // 서버에서 받아오는 스트림
 			pw = new PrintWriter(socket.getOutputStream(), true); // 서버로 보내기 위함 스트림
+			
 		} catch (Exception e) {
 
 		}
 	}
 
 	static void runClient() {
-		try {
-			socket = new Socket(SERVER_ADDR, SERVER_PORT);
-
-			isr = new InputStreamReader(socket.getInputStream());
-			br = new BufferedReader(isr); // 서버에서 받아오는 스트림
-			pw = new PrintWriter(socket.getOutputStream(), true); // 서버로 보내기 위함 스트림
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} // 소켓 연결
+		
 		try {
 			new Thread(new Runnable() {
 
@@ -147,8 +140,8 @@ public class New_Client {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-
-		new New_Client();
+		User us= new User();
+		new New_Client(us);
 
 		/*
 		 * pw.println("52273#!logout"); //완전히 프로그램을 껏을경우 pw.println("방번호#보낼메시지");

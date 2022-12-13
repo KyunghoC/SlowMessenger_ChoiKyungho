@@ -32,8 +32,11 @@ public class LoginFrame extends JFrame implements ActionListener {
 
 	JoinFrame jf;
 	CheckFrame cf;
+	User us = null;
 
-	LoginFrame() {
+	LoginFrame(User _us) {
+
+		us = _us;
 
 		// 이미지 패널
 		icon = new ImageIcon("src/Image/login2.png");
@@ -75,7 +78,7 @@ public class LoginFrame extends JFrame implements ActionListener {
 		login.add(pw);
 		pw.setOpaque(false);
 
-		//pw.addKeyListener(new LogindAction4());
+		// pw.addKeyListener(new LogindAction4());
 
 		/* Button 작업 */
 
@@ -116,11 +119,11 @@ public class LoginFrame extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == joinBtn) {
-			jf = new JoinFrame();
+			jf = new JoinFrame(us);
 		}
 
 		else if (e.getSource() == changeBtn) {
-			cf = new CheckFrame();
+			cf = new CheckFrame(us);
 			System.out.println("1");
 		}
 
@@ -149,13 +152,14 @@ public class LoginFrame extends JFrame implements ActionListener {
 				}
 
 				else if (uid != null && upass != null) {
-					New_Client.pw.println("52272#"+ uid + "#"+ upass); 
+					New_Client.pw.println("52272#" + uid + "#" + upass);
 					try {
-						if(New_Client.br.read()==50)
-						{ // 이 부분이 데이터베이스에 접속해 로그인 정보를 확인하는 부분이다.
+						int check = Integer.parseInt(New_Client.br.readLine());
+						if (check==2) { // 이 부분이 데이터베이스에 접속해 로그인 정보를 확인하는 부분이다.
 							System.out.println("로그인 성공");
 							JOptionPane.showMessageDialog(null, "로그인에 성공하였습니다");
-							new MainFrame();
+							us.setUserID(uid);
+							new MainFrame(us);
 							dispose();
 						} else {
 							System.out.println("로그인 실패 > 로그인 정보 불일치");
