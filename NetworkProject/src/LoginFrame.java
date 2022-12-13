@@ -155,15 +155,21 @@ public class LoginFrame extends JFrame implements ActionListener {
 					New_Client.pw.println("52272#" + uid + "#" + upass);
 					try {
 						int check = Integer.parseInt(New_Client.br.readLine());
-						if (check==2) { // 이 부분이 데이터베이스에 접속해 로그인 정보를 확인하는 부분이다.
+						if (check==1) { // 이 부분이 데이터베이스에 접속해 로그인 정보를 확인하는 부분이다.
 							System.out.println("로그인 성공");
 							JOptionPane.showMessageDialog(null, "로그인에 성공하였습니다");
+							
 							us.setUserID(uid);
 							new MainFrame(us);
 							dispose();
-						} else {
+						} else if(check ==2) {
 							System.out.println("로그인 실패 > 로그인 정보 불일치");
-							JOptionPane.showMessageDialog(null, "로그인에 실패하였습니다");
+							JOptionPane.showMessageDialog(null, "비밀번호가 틀렸습니다.");
+						}
+						else
+						{
+							System.out.println("로그인 실패 > 로그인 정보 불일치");
+							JOptionPane.showMessageDialog(null, "ID가 존재하지 않습니다.");
 						}
 					} catch (HeadlessException e1) {
 						// TODO Auto-generated catch block
