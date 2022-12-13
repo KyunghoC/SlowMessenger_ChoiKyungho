@@ -2,6 +2,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 import javax.swing.*;
@@ -29,11 +31,13 @@ public class MainFrame extends JFrame {
 	CardLayout vc;
 
 	User us = null;
-	
+
+	static JList FriendList; // 친구목록
+
 	MainFrame(User _us) {
-		
-		us= _us;
-		
+
+		us = _us;
+
 		icon = new ImageIcon("src/Image/MainFrame.png");
 		Image img = icon.getImage();
 		Image changeImg = img.getScaledInstance(511, 773, java.awt.Image.SCALE_SMOOTH);
@@ -108,6 +112,8 @@ public class MainFrame extends JFrame {
 		// SearchButton.setBorderPainted(false);
 		SearchButton.setFocusPainted(false);
 		Main.add(SearchButton);
+		final JPopupMenu FFindpopUp = new JPopupMenu();
+		FriendList = new JList();
 
 		icon2 = new ImageIcon("src/Image/HomePanel.png");
 		Image img2 = icon2.getImage();
@@ -120,19 +126,24 @@ public class MainFrame extends JFrame {
 				setOpaque(false);
 				super.paintComponent(g);
 
-				// 친구 목록 창
-				inscrollPane.setEnabled(false);
-				inscrollPane.setBounds(22, 124, 420, 200);
-				inscrollPane.setBackground(Color.WHITE);
-				inscrollPane.getViewport().setBackground(Color.WHITE);
-				outscrollPane.setEnabled(false);
-				outscrollPane.setBounds(22, 387, 420, 200);
-				outscrollPane.setBackground(Color.WHITE);
-				outscrollPane.getViewport().setBackground(Color.WHITE);
-
 			}
 		};
 
+		// 친구 목록 리스트 설정
+
+		// 친구 목록 창
+		//inscrollPane.setEnabled(false);
+		//inscrollPane.setBounds(22, 124, 420, 200);
+		//inscrollPane.setBackground(Color.WHITE);
+		//inscrollPane.getViewport().setBackground(Color.WHITE);
+		outscrollPane.setEnabled(false);
+		outscrollPane.setBounds(22, 387, 420, 200);
+		outscrollPane.setBackground(Color.WHITE);
+		outscrollPane.getViewport().setBackground(Color.WHITE);
+		
+		FriendList.setBounds(22, 124, 420, 200);
+		FriendList.setVisible(true);
+		
 		HomePanel.setLayout(null);
 		// 유저 이름 라벨
 		UserLabel = new JLabel("유저 이름");
@@ -222,7 +233,30 @@ public class MainFrame extends JFrame {
 		vc.show(ViewCard, "hc");
 
 		HomeButton.addActionListener(event -> {
+			New_Client.pw.println("52269#" + us.getUserID());
+			System.out.println("1");
+			String[] d = new String[100];
+
+			while (true) {
+				int i = 0;
+				String temp1 = null;
+				try {
+					temp1 = New_Client.br.readLine();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				if (temp1.equals("-1")) {
+					break;
+				}
+				d[i] = temp1;
+				System.out.println(temp1);
+				i++;
+
+			}
+			FriendList.setListData(d);
 			vc.show(ViewCard, "hc");
+
 		});
 
 		SearchButton.addActionListener(event -> {
@@ -234,10 +268,176 @@ public class MainFrame extends JFrame {
 		});
 
 		LogOutBtn.addActionListener(event -> {
-			New_Client.pw.println("52270#"+us.getUserID());
+			New_Client.pw.println("52270#" + us.getUserID());
 			JOptionPane.showMessageDialog(null, "로그아웃하였습니다");
 			dispose();
-			
+
+		});
+
+		// 친구목록 액션 리스너
+
+		/*
+		 * ActionListener actionListener = new ActionListener() { public void
+		 * actionPerformed(ActionEvent actionEvent) {
+		 * 
+		 * 
+		 * if (actionEvent.getActionCommand() == "대화하기") {
+		 * 
+		 * String inviteFriendID = (String) FriendList.getSelectedValue(); if
+		 * (!(inviteFriendID == null)) { // 초대할 사람이 공백이이 않을 경우 초대
+		 * New_Client.pw.println("52274#" + inviteFriendID); // 대화요청
+		 * System.out.println("대화하기"); } }
+		 * 
+		 * else if (actionEvent.getActionCommand() == "친구정보") {
+		 * 
+		 * int num = FriendList.getSelectedIndex();
+		 * 
+		 * String SelFrdID = (String) FriendList.getSelectedValue(); if (!(SelFrdID ==
+		 * null)) { System.out.println("친구 정보 보기"); String Friend_Id = null; String
+		 * Friend_Name = null; String Friend_Email = null; String Friend_Phone = null;
+		 * 
+		 * /// Connection con1 = null;
+		 * 
+		 * try { String url =
+		 * "jdbc:mysql://localhost/network?serverTimezone=Asia/Seoul"; // network 스키마
+		 * String user = "root"; // 데이터베이스 아이디 String passwd = "12345"; // 데이터베이스 비번
+		 * Class.forName("com.mysql.cj.jdbc.Driver"); con1 =
+		 * DriverManager.getConnection(url, user, passwd);
+		 * 
+		 * PreparedStatement ps1 = null; ResultSet rs1 = null; String sql1 =
+		 * "select * from client_list where client_id=?";
+		 * 
+		 * ps1 = con1.prepareStatement(sql1); ps1.setString(1, SelFrdID); // 리스트에 선택된
+		 * 친구의 ID(또는 이름) rs1 = ps1.executeQuery();
+		 * 
+		 * while (rs1.next()) {
+		 * 
+		 * Friend_Id = rs1.getString("client_ID"); Friend_Name =
+		 * rs1.getString("client_name"); Friend_Email = rs1.getString("client_email");
+		 * Friend_Phone = rs1.getString("client_phone"); } }
+		 * 
+		 * catch (SQLException sqex) { System.out.println("SQLException: " +
+		 * sqex.getMessage()); System.out.println("SQLState: " + sqex.getSQLState()); }
+		 * catch (ClassNotFoundException e) { e.printStackTrace(); }
+		 * 
+		 * JFrame a = new JFrame(); // BorderLayout f = new BorderLayout();
+		 * 
+		 * Label ShowFrdName = new Label(" 이름 : " + Friend_Name); Label ShowFrdEmail =
+		 * new Label(" E-mail : " + Friend_Email); Label ShowFrdPhone = new
+		 * Label(" 연락처 : " + Friend_Phone); Label ShowFrdID = new Label(" ID : " +
+		 * Friend_Id); Label ShowFrdInfo = new Label("< 친구 정보  >");
+		 * 
+		 * a.setLayout(null);
+		 * 
+		 * ShowFrdName.setBounds(30, 50, 100, 30); ShowFrdID.setBounds(30, 100, 100,
+		 * 30); ShowFrdEmail.setBounds(30, 150, 200, 30); ShowFrdPhone.setBounds(30,
+		 * 200, 200, 30); ShowFrdInfo.setBounds(30, 10, 100, 30);
+		 * 
+		 * a.add(ShowFrdName); a.add(ShowFrdID); a.add(ShowFrdEmail);
+		 * a.add(ShowFrdPhone); a.add(ShowFrdInfo);
+		 * 
+		 * a.setVisible(true); a.setSize(300, 300); FrameLocation.setLocation(a);
+		 * a.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); } // if end }
+		 * 
+		 * else if (actionEvent.getActionCommand() == "친구삭제") {
+		 * 
+		 * int num = FriendList.getSelectedIndex(); String SelFrdID = (String)
+		 * FriendList.getSelectedValue(); String url =
+		 * "jdbc:mysql://localhost/network?serverTimezone=Asia/Seoul"; // network 스키마
+		 * String user = "root"; // 데이터베이스 아이디 String passwd = "12345"; // 데이터베이스 비번 if
+		 * (!(SelFrdID == null)) { try { Class.forName("com.mysql.cj.jdbc.Driver"); con1
+		 * = DriverManager.getConnection(url, user, passwd);
+		 * 
+		 * PreparedStatement ps2 = null; int rs2; String sql2 =
+		 * "delete from client_friend_list where client_id=? and friend_id=?";
+		 * 
+		 * ps2 = con1.prepareStatement(sql2); String MyId = New_Client.getClientName();
+		 * ps2.setString(1, MyId); ps2.setString(2, SelFrdID); rs2 =
+		 * ps2.executeUpdate();
+		 * 
+		 * System.out.println("삭제된 친구 수" + rs2);
+		 * 
+		 * // String SetFriend_ID[] = new String[100];
+		 * 
+		 * int f_count = 0;
+		 * 
+		 * PreparedStatement ps3 = null; ResultSet rs3 = null; String sql =
+		 * "select * from client_friend_list where client_id=?"; ps3 =
+		 * con1.prepareStatement(sql); ps3.setString(1, Login_ID); rs3 =
+		 * ps3.executeQuery();
+		 * 
+		 * while (rs3.next()) { String str = rs3.getString("friend_id");
+		 * System.out.println(str);
+		 * 
+		 * Friend_ID[f_count] = str; f_count++;
+		 * 
+		 * } Friend_ID[f_count] = null; FriendList.setListData(Friend_ID);
+		 * 
+		 * }
+		 * 
+		 * catch (SQLException sqex) { System.out.println("SQLException: " +
+		 * sqex.getMessage()); System.out.println("SQLState: " + sqex.getSQLState()); }
+		 * catch (ClassNotFoundException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); } } // if end } else if (actionEvent.getActionCommand()
+		 * == "상세정보") {
+		 * 
+		 * System.out.println("Hi"); String My_Id = null; String My_Name = null; String
+		 * My_Email = null; String My_Phone = null; String My_password = null;
+		 * 
+		 * /// Connection con1 = null; String url =
+		 * "jdbc:mysql://localhost/network?serverTimezone=Asia/Seoul"; // network 스키마
+		 * String user = "root"; // 데이터베이스 아이디 String passwd = "12345"; // 데이터베이스 비번 try
+		 * { Class.forName("com.mysql.cj.jdbc.Driver"); con1 =
+		 * DriverManager.getConnection(url, user, passwd);
+		 * 
+		 * PreparedStatement ps1 = null; ResultSet rs1 = null; String sql1 =
+		 * "select * from client_list where client_id=?";
+		 * 
+		 * ps1 = con1.prepareStatement(sql1); String MyId = New_Client.getClientName();
+		 * ps1.setString(1, MyId); // 리스트에 선택된 친구의 ID(또는 이름) rs1 = ps1.executeQuery();
+		 * 
+		 * while (rs1.next()) {
+		 * 
+		 * My_Id = rs1.getString("client_ID"); My_Name = rs1.getString("client_name");
+		 * My_Email = rs1.getString("client_email"); My_Phone =
+		 * rs1.getString("client_phone"); My_password =
+		 * rs1.getString("client_password"); } }
+		 * 
+		 * catch (SQLException sqex) { System.out.println("SQLException: " +
+		 * sqex.getMessage()); System.out.println("SQLState: " + sqex.getSQLState()); }
+		 * catch (ClassNotFoundException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 * 
+		 * } } };
+		 */
+
+		JMenuItem CreateTalk = new JMenuItem("대화하기");
+		// CreateTalk.addActionListener(actionListener);
+		FFindpopUp.add(CreateTalk);
+		JMenuItem InfoFriend = new JMenuItem("친구정보");
+		// InfoFriend.addActionListener(actionListener);
+		FFindpopUp.add(InfoFriend);
+
+		JMenuItem DeleteFriend = new JMenuItem("친구삭제");
+		// DeleteFriend.addActionListener(actionListener);
+		FFindpopUp.add(DeleteFriend);
+
+		FriendList.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == e.BUTTON3) {
+					JList c = (JList) e.getComponent();
+					int x = e.getX();
+					int y = e.getY();
+					if (!FriendList.isSelectionEmpty()
+							&& FriendList.locationToIndex(e.getPoint()) == FriendList.getSelectedIndex()) {
+						int count = c.getModel().getSize();
+						int cal = count * 18;
+						if (y <= cal) {
+							FFindpopUp.show(FriendList, x, y);
+						}
+					}
+				}
+			}
 		});
 
 		setTitle("채팅 메신저");
