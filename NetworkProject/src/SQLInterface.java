@@ -149,11 +149,11 @@ public class SQLInterface {
 
 		PreparedStatement ps = null;
 
-		String sql = "SELECT client_id FROM client_list WHERE client_id = ?, client_name=?, client_phone=?;"; // check
-																												// ID,
-																												// name,
-																												// and
-																												// phone
+		String sql = "SELECT client_id FROM client_list WHERE client_id = ? AND client_name=? AND client_phone=?;"; // check
+		// ID,
+		// name,
+		// and
+		// phone
 		ps = conn.prepareStatement(sql);
 		ps.setString(1, id);
 		ps.setString(2, name);
