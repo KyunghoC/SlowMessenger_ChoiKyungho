@@ -113,7 +113,17 @@ public class MainFrame extends JFrame implements ListSelectionListener {
 		WeatherPanel.add(lblNewLabel_4);
 
 		Main.add(WeatherPanel);
-
+		
+		// 팝업메뉴 관련
+		final JPopupMenu FFindpopUp = new JPopupMenu();
+		
+		
+		// 친구목록 리스트 관련
+		model = new DefaultListModel();
+		FriendList = new JList(model);
+		FriendList.addListSelectionListener(this);
+		
+		
 		// 홈버튼
 		HomeButton = new JButton();
 		HomeButton.setBounds(12, 18, 33, 29);
@@ -129,10 +139,9 @@ public class MainFrame extends JFrame implements ListSelectionListener {
 		// SearchButton.setBorderPainted(false);
 		SearchButton.setFocusPainted(false);
 		Main.add(SearchButton);
-		final JPopupMenu FFindpopUp = new JPopupMenu();
-		model = new DefaultListModel();
-		FriendList = new JList(model);
-		FriendList.addListSelectionListener(this);
+		
+		
+		
 
 		icon2 = new ImageIcon("src/Image/HomePanel.png");
 		Image img2 = icon2.getImage();

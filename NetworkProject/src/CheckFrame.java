@@ -110,8 +110,8 @@ public class CheckFrame extends JFrame implements ActionListener {
 
 		if (e.getSource() == goBtn) {
 			if (uid.equals("") || uName.equals("") || uPN.equals("")) {
-				JOptionPane.showMessageDialog(null, "모든 정보를 기입해주세요", "회원가입 실패", JOptionPane.ERROR_MESSAGE);
-				System.out.println("회원가입 실패 > 회원정보 미입력");
+				JOptionPane.showMessageDialog(null, "모든 정보를 기입해주세요", "조회 실패", JOptionPane.ERROR_MESSAGE);
+				System.out.println("조회 실패 > 회원정보 미입력");
 			}
 
 			else if (!uid.equals("") && !uName.equals("") && !uPN.equals("")) {

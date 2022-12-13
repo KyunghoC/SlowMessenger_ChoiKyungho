@@ -135,13 +135,7 @@ public class SQLInterface {
 		conn.close();
 	}
 
-	public static Integer validPWChange(String id, String name, String phone, String pw, String salt) // input ID, name,
-																										// phone, salt,
-																										// Pw and valid
-																										// password to
-																										// change. If
-																										// valid, change
-																										// the password
+	public static Integer checkAccount(String id, String name, String phone)
 			throws SQLException, ClassNotFoundException {
 		Connection conn = DriverManager.getConnection(dburl, dbUser, dbpasswd);
 
@@ -149,11 +143,8 @@ public class SQLInterface {
 
 		PreparedStatement ps = null;
 
-		String sql = "SELECT client_id FROM client_list WHERE client_id = ? AND client_name=? AND client_phone=?;"; // check
-		// ID,
-		// name,
-		// and
-		// phone
+		String sql = "SELECT client_id FROM client_list WHERE client_id = ? AND client_name=? AND client_phone=?;";
+
 		ps = conn.prepareStatement(sql);
 		ps.setString(1, id);
 		ps.setString(2, name);
@@ -162,23 +153,34 @@ public class SQLInterface {
 		ps.close();
 
 		if (rs.next()) { // if there is a result
-			PreparedStatement ps1 = null;
 
-			String sql1 = "UPDATE client_list SET client_password=?, salt=? WHERE client_id = ?;"; // update password
-			ps1 = conn.prepareStatement(sql1);
-			ps1.setString(1, pw);
-			ps1.setString(2, salt);
-			ps1.setString(3, id);
-			ResultSet rs1 = ps1.executeQuery();
-			ps1.close();
 			rs.close();
-			rs1.close();
 			conn.close();
-			return 1; // update successfully
+			return 1; // Find successfully
 		}
 		rs.close();
 		conn.close();
-		return 4; // upadte failed
+		return 4; // Find failed
+	}
+
+	public static void validPWChange(String id, String pw, String salt) throws SQLException, ClassNotFoundException {
+		Connection conn = DriverManager.getConnection(dburl, dbUser, dbpasswd);
+
+		Class.forName("com.mysql.cj.jdbc.Driver");
+
+		PreparedStatement ps = null;
+
+		String sql = "UPDATE client_list SET client_password=?, salt=? WHERE client_id = ?;"; // update password
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, pw);
+		ps.setString(2, salt);
+		ps.setString(3, id);
+		ResultSet rs = ps.executeQuery();
+		ps.close();
+
+		rs.close();
+		conn.close();
+
 	}
 
 	public static Integer getFriendNum(String UID) throws SQLException, ClassNotFoundException {
