@@ -37,8 +37,6 @@ public class New_Server {
 		
 		listener = new ServerSocket(PORT_NO);// 초기화
 
-		System.out.println("ON PORT : " + PORT_NO);
-
 		socket = listener.accept(); // 외부에서 소켓이 연결할때까지 대기함
 		System.out.println("accept Connections");
 		String line = null;
@@ -318,19 +316,6 @@ public class New_Server {
 
 	}// Connections End
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		try {
-			System.out.println("Server Running");
-			new New_Server();
-			// new New_Server().runServer(); // 서버 실행
-
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-
-	}
-
 	public String[] getSearch(String client_id) {
 		// TODO Auto-generated method stub
 		Connection conn;
@@ -342,7 +327,7 @@ public class New_Server {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(url, user, passwd);
 			System.out.println("---------------------");
-			System.out.println("친구 찾기 DB접속 성고");
+			System.out.println("친구 찾기 DB접속 성공");
 
 			String sql = "select client_friend_list.client_id,client_friend_list.friend_id from client_friend_list  join login_check on(client_friend_list.friend_id = login_check.client_id) where client_friend_list.client_id=? and login_check.log='login';";
 			// 물음표에는 동적으로 변화하는 값을 넣기 위함
@@ -374,6 +359,19 @@ public class New_Server {
 		}
 
 		return frList; // 친구목록전송
+
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		try {
+			System.out.println("Server Running");
+			new New_Server();
+			// new New_Server().runServer(); // 서버 실행
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 
 	}
 

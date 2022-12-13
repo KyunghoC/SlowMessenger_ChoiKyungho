@@ -166,16 +166,6 @@ public class New_Client {
 		// TODO Auto-generated method stub
 		User us = new User();
 		new New_Client(us);
-
-		/*
-		 * pw.println("52273#!logout"); //완전히 프로그램을 껏을경우 pw.println("방번호#보낼메시지");
-		 * //일반적으로 문자를 해당 방번호에게 보내고 싶을경우 pw.println("해당방번호#!exit"); //해당 방을 나갈려고 할 경우
-		 * pw.println("해당방번호#!invite"); //로그인 후 처음으로 대화 요청을 받았을 경우
-		 * pw.println("52274#Ting_Talk2"); //처음 친구에게 말을 걸었을 경우
-		 * pw.println("52275#Ting_Talk2#1"); //이미 두명있는 방에서 다른 사람을 초대할경우
-		 * 
-		 */
-
 	}
 
 }
