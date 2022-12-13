@@ -21,11 +21,13 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements ListSelectionListener {
 	ImageIcon icon; // 백그라운드 이미지
 	ImageIcon icon2; // 홈패널 이미지
 	ImageIcon icon3; // 찾기패널 이미지
@@ -128,7 +130,9 @@ public class MainFrame extends JFrame {
 		SearchButton.setFocusPainted(false);
 		Main.add(SearchButton);
 		final JPopupMenu FFindpopUp = new JPopupMenu();
-		FriendList = new JList();
+		model = new DefaultListModel();
+		FriendList = new JList(model);
+		FriendList.addListSelectionListener(this);
 
 		icon2 = new ImageIcon("src/Image/HomePanel.png");
 		Image img2 = icon2.getImage();
@@ -147,7 +151,6 @@ public class MainFrame extends JFrame {
 		// 친구 목록 리스트 설정
 
 		// 친구 목록 창
-		model = new DefaultListModel();
 //		FriendList.setBounds(22, 124, 420, 200);
 //		FriendList.setVisible(true);
 		inscrollPane = new JScrollPane(FriendList);
@@ -176,10 +179,12 @@ public class MainFrame extends JFrame {
 		// HomeButton.setBorderPainted(false);
 		UserBtn.setFocusPainted(false);
 
+		model.addElement("Hi there"); // TODO: 이렇게 추가!
+
 		// 홈버튼
 		HomePanel.add(UserBtn);
-		HomePanel.add(FriendList);
-//		HomePanel.add(inscrollPane);
+//		HomePanel.add(FriendList);
+		HomePanel.add(inscrollPane);
 		HomePanel.add(outscrollPane);
 		HomePanel.add(UserLabel);
 		HomePanel.add(UserStateLabel);
@@ -463,5 +468,13 @@ public class MainFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	// ListSelectionListener
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		if (!e.getValueIsAdjusting()) {
+			System.out.println("selected :" + FriendList.getSelectedValue());
+		}
 	}
 }
