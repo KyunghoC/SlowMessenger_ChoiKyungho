@@ -1,12 +1,26 @@
 
-import java.awt.*;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
-import javax.swing.*;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -22,7 +36,7 @@ public class MainFrame extends JFrame {
 
 	JLabel UserLabel, UserStateLabel;
 
-	JScrollPane inscrollPane = new JScrollPane(); // online 친구창
+	JScrollPane inscrollPane = null; // online 친구창
 	JScrollPane outscrollPane = new JScrollPane(); // offline 친구창
 	JScrollPane fscrollPane = new JScrollPane(); // 친구 찾기 창
 
@@ -33,6 +47,7 @@ public class MainFrame extends JFrame {
 	User us = null;
 
 	static JList FriendList; // 친구목록
+	private DefaultListModel model;
 
 	MainFrame(User _us) {
 
@@ -132,18 +147,19 @@ public class MainFrame extends JFrame {
 		// 친구 목록 리스트 설정
 
 		// 친구 목록 창
-		//inscrollPane.setEnabled(false);
-		//inscrollPane.setBounds(22, 124, 420, 200);
-		//inscrollPane.setBackground(Color.WHITE);
-		//inscrollPane.getViewport().setBackground(Color.WHITE);
+		model = new DefaultListModel();
+//		FriendList.setBounds(22, 124, 420, 200);
+//		FriendList.setVisible(true);
+		inscrollPane = new JScrollPane(FriendList);
+		inscrollPane.setEnabled(false);
+		inscrollPane.setBounds(22, 124, 420, 200);
+		inscrollPane.setBackground(Color.WHITE);
+		inscrollPane.getViewport().setBackground(Color.WHITE);
 		outscrollPane.setEnabled(false);
 		outscrollPane.setBounds(22, 387, 420, 200);
 		outscrollPane.setBackground(Color.WHITE);
 		outscrollPane.getViewport().setBackground(Color.WHITE);
-		
-		FriendList.setBounds(22, 124, 420, 200);
-		FriendList.setVisible(true);
-		
+
 		HomePanel.setLayout(null);
 		// 유저 이름 라벨
 		UserLabel = new JLabel("유저 이름");
@@ -162,7 +178,8 @@ public class MainFrame extends JFrame {
 
 		// 홈버튼
 		HomePanel.add(UserBtn);
-		HomePanel.add(inscrollPane);
+		HomePanel.add(FriendList);
+//		HomePanel.add(inscrollPane);
 		HomePanel.add(outscrollPane);
 		HomePanel.add(UserLabel);
 		HomePanel.add(UserStateLabel);
