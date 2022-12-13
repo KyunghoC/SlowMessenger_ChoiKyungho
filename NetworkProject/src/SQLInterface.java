@@ -144,23 +144,22 @@ public class SQLInterface {
 		PreparedStatement ps = null;
 
 		String sql = "SELECT client_id FROM client_list WHERE client_id = ? AND client_name=? AND client_phone=?;";
-
 		ps = conn.prepareStatement(sql);
 		ps.setString(1, id);
 		ps.setString(2, name);
 		ps.setString(3, phone);
 		ResultSet rs = ps.executeQuery();
-		ps.close();
 
-		if (rs.next()) { // if there is a result
+		int tmp;
+		if (rs.next()) // if there is a result
+			tmp = 1; // Find successfully
+		else
+			tmp = 4;
 
-			rs.close();
-			conn.close();
-			return 1; // Find successfully
-		}
 		rs.close();
+		ps.close();
 		conn.close();
-		return 4; // Find failed
+		return tmp; // Find failed
 	}
 
 	public static void validPWChange(String id, String pw, String salt) throws SQLException, ClassNotFoundException {
