@@ -4,6 +4,7 @@ import javax.swing.border.Border;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.sql.*;
 
 public class CheckFrame extends JFrame implements ActionListener {
@@ -106,14 +107,39 @@ public class CheckFrame extends JFrame implements ActionListener {
 		String uid = id.getText();
 		String uName = name.getText();
 		String uPN = phoneNumber.getText();
-		/*
-		 * if (e.getSource() == goBtn) { if (uid.equals("") || upass.equals("")) {
-		 * JOptionPane.showMessageDialog(null, "모든 정보를 기입해주세요", "회원가입 실패",
-		 * JOptionPane.ERROR_MESSAGE); System.out.println("회원가입 실패 > 회원정보 미입력"); }
-		 * 
-		 * else if (!uid.equals("") && !uName.equals("") && !uPN.equals("")) { if (함수
-		 * 들어가야함) { } } }
-		 */
+
+		if (e.getSource() == goBtn) {
+			if (uid.equals("") || uName.equals("") || uPN.equals("")) {
+				JOptionPane.showMessageDialog(null, "모든 정보를 기입해주세요", "회원가입 실패", JOptionPane.ERROR_MESSAGE);
+				System.out.println("회원가입 실패 > 회원정보 미입력");
+			}
+
+			else if (!uid.equals("") && !uName.equals("") && !uPN.equals("")) {
+				New_Client.pw.println("52268#" + uid +"#" +uName + "#" + uPN);
+				System.out.println("3");
+				try {
+					int check = Integer.parseInt(New_Client.br.readLine());
+					if(check==1)
+					{
+						JOptionPane.showMessageDialog(null, "로그인에 성공하였습니다");
+						new ChangeFrame(us);
+						dispose();
+					}
+					else if (check == 4)
+					{
+						JOptionPane.showMessageDialog(null, "계정을 찾지 못했습니다.", "조회 실패", JOptionPane.ERROR_MESSAGE);
+					}
+					
+				} catch (NumberFormatException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+
+		}
 		if (e.getSource() == ExitBtn) {
 			dispose();
 		}
@@ -124,33 +150,4 @@ public class CheckFrame extends JFrame implements ActionListener {
 
 	}
 
-	boolean joinCheck(String _i, String _p) {
-		boolean flag = false;
-
-		String id = _i;
-		String pw = _p;
-		Connection con = null;
-		Statement stmt = null;
-		String url = "jdbc:mysql://localhost/network?serverTimezone=Asia/Seoul"; // network 스키마
-		String user = "root"; // 데이터베이스 아이디
-		String passwd = "12345"; // 데이터베이스 비번
-
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			con = DriverManager.getConnection(url, user, passwd);
-			stmt = con.createStatement();
-			String insertStr = "INSERT INTO client_list (client_id, client_password) VALUES('" + id + "', '" + pw
-					+ "')";
-			stmt.executeUpdate(insertStr);
-			insertStr = "INSERT INTO login_check VALUES('" + id + "', 'logout')";
-			stmt.executeUpdate(insertStr);
-			flag = true;
-			System.out.println("회원가입 성공");
-		} catch (Exception e) {
-			flag = false;
-			System.out.println("회원가입 실패 > " + e.toString());
-		}
-
-		return flag;
-	}
 }

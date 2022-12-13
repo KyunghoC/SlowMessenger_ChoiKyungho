@@ -42,25 +42,35 @@ public class New_Server {
 
 		while ((line = br.readLine()) != null) {
 			String[] division = line.split("#");
-			int divisionNum = Integer.parseInt(division[0]);
-			if (divisionNum == 52273) {
+			
+			if (division[0].equals("52273")) // 채팅방 접속
+			{
 				runServer();
 				break;
 			}
+			
+			if (division[0].equals("52268")) // 계정 확인
+			{
+				int check = SQLInterface.checkAccount(division[1], division[2], division[3]);
+				System.out.println("check is "+ check);
+				pw.println(check);
+			}
+			
 
-			if (division[0].equals("52272")) {
+			if (division[0].equals("52272")) // 로그인
+			{
 				System.out.println(division[1] + division[2]);
 				int check = SQLInterface.validLogin(division[1], division[2]);
 				System.out.println(check);
 				pw.println(check);
 			}
 			
-			if(division[0].equals("52270"))
+			if(division[0].equals("52270")) // 로그아웃
 			{
 				SQLInterface.client_logout(division[1]);
 			}
 			
-			if(division[0].equals("52269"))
+			if(division[0].equals("52269")) // 이건 친구목록 리스트 가져오기
 			{
 				String[] temp=null;
 				temp = getSearch(division[1]);
@@ -296,8 +306,6 @@ public class New_Server {
 
 	}// Connections End
 
-	
-
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
@@ -310,8 +318,7 @@ public class New_Server {
 		}
 
 	}
-	
-	
+
 	public String[] getSearch(String client_id) {
 		// TODO Auto-generated method stub
 		Connection conn;
