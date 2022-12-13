@@ -24,14 +24,42 @@ public class New_Server {
 	Map<Integer, String[]> client_room_list = new HashMap<>(); // 방관리
 	Map<String, Connections> client_all = new HashMap<>(); // 전체 관리
 	// =================================바뀌는 부분
+	Socket socket;
 
 	public Integer SERVER_GIVE_NUMBER = 1; // 방생성시 필요한 방번호
 
 	New_Server() throws IOException {
 		listener = new ServerSocket(PORT_NO);// 초기화
-		
-
 		System.out.println("ON PORT : " + PORT_NO);
+
+		socket = listener.accept(); // 외부에서 소켓이 연결할때까지 대기함
+		System.out.println("accept Connections");
+		String line = null;
+		BufferedReader br;
+		PrintWriter pw;
+		br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		pw = new PrintWriter(socket.getOutputStream(), true);
+
+		while ((line = br.readLine()) != null) {
+			String[] division = line.split("#");
+			int divisionNum = Integer.parseInt(division[0]);
+			if (divisionNum == 52273) {
+				runServer();
+				break;
+			}
+
+			if (division[0].equals("52272")) {
+				System.out.println(division[1] + division[2]);
+				int check = client_login(division[1], division[2]);
+				System.out.println(check);
+				pw.println(check);
+			}
+			
+			if(division[0].equals("52270"))
+			{
+				client_logout(division[1]);
+			}
+		}
 	}
 
 	// 객체를 만들때 기본적인 초기화 과정
@@ -39,31 +67,6 @@ public class New_Server {
 		try {
 			while (true) // 무한루프로 외부에서 연결하는 소켓을 서버와 연결
 			{
-				Socket socket = listener.accept(); // 외부에서 소켓이 연결할때까지 대기함
-				System.out.println("accept Connections");
-				String line = null;
-				BufferedReader br;
-				PrintWriter pw;
-				br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				pw = new PrintWriter(socket.getOutputStream(), true);
-				
-				while ((line = br.readLine()) != null)
-				{
-					String[] division = line.split("#");
-					int divisionNum = Integer.parseInt(division[0]);
-					if(divisionNum==52273)
-					{
-						break;
-					}
-					
-					if (division[0].equals("52272")) {
-						System.out.println(division[1] + division[2]);
-						int check = client_login(division[1], division[2]);
-						System.out.println(check);
-						pw.println(check);
-					}
-				}
-				
 				Connections con = new Connections(socket); // 소켓을 인자로 넘김
 
 				con.start(); // 생성된 객체 Thread를 시작 시킴
@@ -363,10 +366,42 @@ public class New_Server {
 		// TODO Auto-generated method stub
 		try {
 			System.out.println("Server Running");
-			new New_Server().runServer(); // 서버 실행
+			new New_Server();
+			// new New_Server().runServer(); // 서버 실행
 
 		} catch (Exception e) {
 			System.out.println(e);
+		}
+
+	}
+	
+	public void client_logout(String client_id) {
+		// TODO Auto-generated method stub
+		Connection conn;
+		String url = "jdbc:mysql://localhost/network?serverTimezone=Asia/Seoul"; // network 스키마
+		String user = "root"; // 데이터베이스 아이디
+		String passwd = "12345"; // 데이터베이스 비번
+		boolean LogCheck = false;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection(url, user, passwd);
+			System.out.println("---------------------");
+			System.out.println("로그아웃 DB 접근 성공");
+
+			String sql;
+			sql = "update login_check set log='logout' where client_id=?;";
+			java.sql.PreparedStatement pstmt = conn.prepareStatement(sql); // 매 검색시 변화하는 값을 검색하기 위한 PreparedStatement
+																			// 클래스
+
+			// 로그아웃시 로그인체크를 업데이트 시킴.
+			pstmt = conn.prepareStatement(sql); // 매 검색시 변화하는 값을 검색하기 위한 PreparedStatement 클래스
+			pstmt.setString(1, client_id); // 동적으로 변화하는 값을 전달 만약 전달하는 값이 정수이면 setInt(index,정수) 이런 식으로 하면됨.
+			pstmt.executeUpdate();
+
+			System.out.println("---------------------");
+			conn.close(); // 연결 끊기
+		} catch (Exception e) {
+			System.out.println("DB  접속 오류" + e);
 		}
 
 	}

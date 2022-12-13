@@ -234,7 +234,7 @@ public class MainFrame extends JFrame {
 		});
 
 		LogOutBtn.addActionListener(event -> {
-			New_Client.pw.println("52270!"+us.getUserID());
+			New_Client.pw.println("52270#"+us.getUserID());
 			JOptionPane.showMessageDialog(null, "로그아웃하였습니다");
 			dispose();
 			
