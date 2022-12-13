@@ -1,5 +1,5 @@
-
-import java.io.InputStream;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 public class User {
 
@@ -8,7 +8,11 @@ public class User {
 	private String userPhoneNum; // phone_num
 	private String userEmail; // email
 	private String userPassword; // password
-	private InputStream inputStream;
+	private String userNickname; // Nickname
+	private Date userBitrhDate; // Birth
+	private String salt; // salt
+	private Timestamp userLastCon; // Last connection time
+	private String statMessage;
 
 	public String getUserID() {
 		return userID;
@@ -24,6 +28,14 @@ public class User {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getUserPhoneNum() {
+		return userPhoneNum;
+	}
+
+	public void setUserPhoneNum(String userPhoneNum) {
+		this.userPhoneNum = userPhoneNum;
 	}
 
 	public String getUserEmail() {
@@ -42,19 +54,44 @@ public class User {
 		this.userPassword = userPassword;
 	}
 
-	public String getUserPhoneNum() {
-		return userPhoneNum;
+	public String getUserNickname() {
+		return userNickname;
 	}
 
-	public void setUserPhoneNum(String userPhoneNum) {
-		this.userPhoneNum = userPhoneNum;
+	public void setUserNickname(String userNickname) {
+		this.userNickname = userNickname;
 	}
 
-	public InputStream getInputStream() {
-		return inputStream;
+	public Date getUserBitrhDate() {
+		return userBitrhDate;
 	}
 
-	public void setInputStream(InputStream inputStream) {
-		this.inputStream = inputStream;
+	public void setUserBitrhDate(Date userBitrhDate) {
+		this.userBitrhDate = userBitrhDate;
 	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
+	public Timestamp getUserLastCon() {
+		return userLastCon;
+	}
+
+	public void setUserLastCon(Timestamp userLastCon) {
+		this.userLastCon = userLastCon;
+	}
+
+	public String getStatMessage() {
+		return statMessage;
+	}
+
+	public void setStatMessage(String statMessage) {
+		this.statMessage = statMessage;
+	}
+
 }
