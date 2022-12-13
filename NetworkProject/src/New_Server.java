@@ -29,6 +29,15 @@ public class New_Server {
 	public Integer SERVER_GIVE_NUMBER = 1; // 방생성시 필요한 방번호
 
 	New_Server() throws IOException, ClassNotFoundException, SQLException {
+		InetAddress address = InetAddress.getLocalHost();
+		PrintWriter server_info = new PrintWriter("server_info.dat");
+		server_info.write("127.0.0.1"); // ip 주소 받아오기
+		server_info.write("\n" + PORT_NO);
+		server_info.close();
+		
+		listener = new ServerSocket(PORT_NO);// 초기화
+
+		System.out.println("ON PORT : " + PORT_NO);
 		listener = new ServerSocket(PORT_NO);// 초기화
 		System.out.println("ON PORT : " + PORT_NO);
 

@@ -1,9 +1,13 @@
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,9 +18,9 @@ public class New_Client {
 //로그인 Tab과 서버 연결을 하기위한 클라이언트 프로그램의 중추적인 클래스
 	private static String Client_Name; // 사용자 ID
 	// ===============================================================서버 설정
-	final static String SERVER_ADDR = "127.0.0.1"; // 자바 채팅 서버 주소
+	//final static String SERVER_ADDR = "127.0.0.1"; // 자바 채팅 서버 주소
 	public static final String DBIP = "localhost"; // DB 접속 아이피 설정
-	final static int SERVER_PORT = 52273; // 자바 채팅서버 포트번호
+	//final static int SERVER_PORT = 52273; // 자바 채팅서버 포트번호
 	// ===============================================================
 	public static Socket socket; // 서버와 연결하기 위한 포트
 	public static PrintWriter pw; // 서버에게 데이터를 쓰기 위한 확장 스트림
@@ -24,28 +28,48 @@ public class New_Client {
 	public static volatile InputStreamReader isr;
 	private static Map<Integer, client_2> chat_room = new HashMap<>(); // 다수의 방을 효율적으로 관리하기 위한 콜렉션
 	User us = null;
+
 	/**
 	 * @param args
 	 * @throws IOException
 	 */
 	New_Client(User _us) // 기본적으로 메인 로그인 GUI를 생성
 	{
-		us= _us;
+		us = _us;
 		new LoginFrame(us);
 		try {
-			socket = new Socket(SERVER_ADDR, SERVER_PORT);
+			String server_ip = null;
+			String server_port = null;
+			File file = new File("server_info.dat"); // 파일 객체 생성
+
+			if (file.exists() == true) { // server_info.dat이 있다면
+				FileReader filereader = new FileReader(file); // 입력 스트림 생성
+				BufferedReader buffReader = new BufferedReader(filereader); // 입력 버퍼 생성
+				String line = "";
+				ArrayList<String> ServerInfo = new ArrayList<>(); // array 생성
+				while ((line = buffReader.readLine()) != null) {
+					ServerInfo.add(line); // readLine()을 통해 array에 한줄씩 저장
+				}
+				server_ip = ServerInfo.get(0); // 첫째 줄
+				server_port = ServerInfo.get(1); // 둘째 줄
+
+				buffReader.close();
+			}
+
+			socket = new Socket(server_ip, Integer.parseInt(server_port)); // 소켓 정보
 
 			isr = new InputStreamReader(socket.getInputStream());
 			br = new BufferedReader(isr); // 서버에서 받아오는 스트림
 			pw = new PrintWriter(socket.getOutputStream(), true); // 서버로 보내기 위함 스트림
-			
-		} catch (Exception e) {
 
+		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 		}
+
 	}
 
 	static void runClient() {
-		
+
 		try {
 			new Thread(new Runnable() {
 
@@ -140,7 +164,7 @@ public class New_Client {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		User us= new User();
+		User us = new User();
 		new New_Client(us);
 
 		/*
