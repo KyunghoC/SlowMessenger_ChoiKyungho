@@ -92,6 +92,12 @@ public class New_Server {
 			{
 				SQLInterface.validPWChange(division[1], division[2], division[3]);
 			}
+			
+			else if(division[0].equals("59982"))
+			{
+				int check = join(division[1],division[2],division[3],division[4],division[5],division[6],division[7]);
+				pw.println(check);
+			}
 		}
 	}
 
@@ -374,5 +380,31 @@ public class New_Server {
 		}
 
 	}
+	
+	
+	public Integer join(String name, String nickname, String id, String pw, String pn, String birth, String email)
+	{
+		Connection con = null;
+		Statement stmt = null;
+		String url = "jdbc:mysql://localhost/network?serverTimezone=Asia/Seoul"; // network 스키마
+		String user = "root"; // 데이터베이스 아이디
+		String passwd = "12345"; // 데이터베이스 비번
 
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection(url, user, passwd);
+			stmt = con.createStatement();
+			String insertStr = "INSERT INTO client_list (client_id, client_password, client_name, client_email, client_phone, client_nick, client_birth) VALUES ('" + id+ "','" + pw + "','" + name + "','" + email + "','" + pn +"','" + nickname + "','" + birth + "')";
+			stmt.executeUpdate(insertStr);
+			insertStr = "INSERT INTO login_check VALUES('" + id + "', 'logout')";
+			stmt.executeUpdate(insertStr);
+			int k = 1;
+			return k;
+			
+		} catch (Exception e) {
+			int k = 0;
+			System.out.println("회원가입 실패 > " + e.toString());
+			return 0;
+		}
+	}
 }
