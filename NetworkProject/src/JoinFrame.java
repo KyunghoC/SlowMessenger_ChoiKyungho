@@ -170,6 +170,7 @@ public class JoinFrame extends JFrame implements ActionListener {
 					if(check==1)
 					{
 						JOptionPane.showMessageDialog(null, "회원가입에 성공하였습니다");
+						dispose();
 					}
 					
 					if(check==0)
