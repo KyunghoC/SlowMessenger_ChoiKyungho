@@ -36,6 +36,7 @@ public class New_Server {
 		server_info.close();
 		
 		listener = new ServerSocket(PORT_NO);// 초기화
+		System.out.println("ON PORT : " + PORT_NO);
 
 		socket = listener.accept(); // 외부에서 소켓이 연결할때까지 대기함
 		System.out.println("accept Connections");
