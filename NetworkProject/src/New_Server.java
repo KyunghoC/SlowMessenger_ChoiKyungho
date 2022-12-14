@@ -34,72 +34,11 @@ public class New_Server {
 		server_info.write("127.0.0.1"); // ip 주소 받아오기
 		server_info.write("\n" + PORT_NO);
 		server_info.close();
-		
+
 		listener = new ServerSocket(PORT_NO);// 초기화
 		System.out.println("ON PORT : " + PORT_NO);
-
-		socket = listener.accept(); // 외부에서 소켓이 연결할때까지 대기함
-		System.out.println("accept Connections");
-		String line = null;
-		BufferedReader br;
-		PrintWriter pw;
-		br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		pw = new PrintWriter(socket.getOutputStream(), true);
-
-		while ((line = br.readLine()) != null) {
-			String[] division = line.split("#");
-			
-			if (division[0].equals("52273")) // 채팅방 접속
-			{
-				runServer();
-				break;
-			}
-			
-			else if (division[0].equals("52268")) // 계정 확인
-			{
-				int check = SQLInterface.checkAccount(division[1], division[2], division[3]);
-				System.out.println("check is "+ check);
-				pw.println(check);
-			}
-			
-
-			else if (division[0].equals("52272")) // 로그인
-			{
-				System.out.println(division[1] + division[2]);
-				int check = SQLInterface.validLogin(division[1], division[2]);
-				System.out.println(check);
-				pw.println(check);
-			}
-			
-			else if(division[0].equals("52270")) // 로그아웃
-			{
-				SQLInterface.client_logout(division[1]);
-			}
-			
-			else if(division[0].equals("52269")) // 이건 친구목록 리스트 가져오기
-			{
-				String[] temp=null;
-				temp = getSearch(division[1]);
-				System.out.println(temp.length);
-				
-				for(int i=0; i<temp.length; i++)
-				{
-					pw.println(temp[i]);
-				}
-				pw.println("-1"); // -1은 종료값으로 전달
-			}
-			
-			else if(division[0].equals("52282"))
-			{
-				SQLInterface.validPWChange(division[1], division[2], division[3]);
-			}
-			
-			else if(division[0].equals("59982"))
-			{
-				int check = join(division[1],division[2],division[3],division[4],division[5],division[6],division[7]);
-				pw.println(check);
-			}
-		}
+		
+		runServer();
 	}
 
 	// 객체를 만들때 기본적인 초기화 과정
@@ -107,8 +46,9 @@ public class New_Server {
 		try {
 			while (true) // 무한루프로 외부에서 연결하는 소켓을 서버와 연결
 			{
+				socket = listener.accept(); // 외부에서 소켓이 연결할때까지 대기함
 				Connections con = new Connections(socket); // 소켓을 인자로 넘김
-
+				
 				con.start(); // 생성된 객체 Thread를 시작 시킴
 
 			} // while end
@@ -237,8 +177,57 @@ public class New_Server {
 								sendClientsList(tempDivision); // 해당방의 대화목록을 갱신
 							} // if end
 						}
-					} else { // ================================================================================해당
-								// 방에게만 메시지를 전송.
+					}
+
+					else if (division[0].equals("52273")) // 채팅방 접속
+					{
+						runServer();
+						break;
+					}
+
+					else if (division[0].equals("52268")) // 계정 확인
+					{
+						int check = SQLInterface.checkAccount(division[1], division[2], division[3]);
+						System.out.println("check is " + check);
+						pw.println(check);
+					}
+
+					else if (division[0].equals("52272")) // 로그인
+					{
+						System.out.println(division[1] + division[2]);
+						int check = SQLInterface.validLogin(division[1], division[2]);
+						System.out.println(check);
+						pw.println(check);
+					}
+
+					else if (division[0].equals("52270")) // 로그아웃
+					{
+						SQLInterface.client_logout(division[1]);
+					}
+
+					else if (division[0].equals("52269")) // 이건 친구목록 리스트 가져오기
+					{
+						String[] temp = null;
+						temp = getSearch(division[1]);
+						System.out.println(temp.length);
+
+						for (int i = 0; i < temp.length; i++) {
+							pw.println(temp[i]);
+						}
+						pw.println("-1"); // -1은 종료값으로 전달
+					}
+
+					else if (division[0].equals("52282")) {
+						SQLInterface.validPWChange(division[1], division[2], division[3]);
+					}
+
+					else if (division[0].equals("59982")) {
+						int check = signup(division[1],division[2],division[3],division[4],division[5],division[6],division[7]);
+						pw.println(check);
+					}
+
+					else { // ================================================================================해당
+							// 방에게만 메시지를 전송.
 						if (division[1].equals("!exit"))// ==================================방을 나갔을경우 방번호#!exit
 						{
 							synchronized (client_room_list) {
@@ -368,7 +357,7 @@ public class New_Server {
 		return frList; // 친구목록전송
 
 	}
-	
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
@@ -381,10 +370,8 @@ public class New_Server {
 		}
 
 	}
-	
-	
-	public Integer join(String name, String nickname, String id, String pw, String pn, String birth, String email)
-	{
+
+	public static Integer signup(String name, String nickname, String id, String pw, String pn, String birth, String email) {
 		Connection con = null;
 		Statement stmt = null;
 		String url = "jdbc:mysql://localhost/network?serverTimezone=Asia/Seoul"; // network 스키마
@@ -395,13 +382,15 @@ public class New_Server {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection(url, user, passwd);
 			stmt = con.createStatement();
-			String insertStr = "INSERT INTO client_list (client_id, client_password, client_name, client_email, client_phone, client_nick, client_birth) VALUES ('" + id+ "','" + pw + "','" + name + "','" + email + "','" + pn +"','" + nickname + "','" + birth + "')";
+			String insertStr = "INSERT INTO client_list (client_id, client_password, client_name, client_email, client_phone, client_nick, client_birth) VALUES ('"
+					+ id + "','" + pw + "','" + name + "','" + email + "','" + pn + "','" + nickname + "','" + birth
+					+ "')";
 			stmt.executeUpdate(insertStr);
 			insertStr = "INSERT INTO login_check VALUES('" + id + "', 'logout')";
 			stmt.executeUpdate(insertStr);
 			int k = 1;
 			return k;
-			
+
 		} catch (Exception e) {
 			int k = 0;
 			System.out.println("회원가입 실패 > " + e.toString());
